@@ -75,9 +75,10 @@ namespace JSONStash.Web.Service.Services
                 {
                     _context.SaveChanges();
 
-                    _unlockTokenService.SendToken(user);
+                    bool sent = _unlockTokenService.SendToken(user);
 
-                    return new AuthenticateResponse(null, null, "User has been locked. You will receive an email on how you can unlock your user.");
+                    return sent ? new AuthenticateResponse(null, null, "User has been locked. You will receive an email on how you can unlock your user.") 
+                        : new AuthenticateResponse(null, null, "There was an issue sending your unlock token. Please, contact the administrator.");
                 }
             }
             else

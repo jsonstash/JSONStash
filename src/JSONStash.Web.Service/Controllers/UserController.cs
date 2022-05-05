@@ -167,11 +167,9 @@ namespace JSONStash.Web.Service.Controllers
 
                         await _context.SaveChangesAsync();
 
-                        string newToken = user.ResetToken;
+                        bool sent = _unlockTokenService.SendToken(user);
 
-                        await _unlockTokenService.SendToken(user);
-
-                        return Ok("A new unlock token has been sent.");
+                        return sent ? Ok("A new unlock token has been sent.") : BadRequest("There was an issue sending your unlock token. Please, contact the administrator.");
                     }
                     else
                     {
