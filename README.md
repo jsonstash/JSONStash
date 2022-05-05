@@ -4,7 +4,10 @@ A free self-hosted JSON storage solution.
 
 ## Getting Started
 
-Read the docs: [docs.jsonstash.com](https://docs.jsonstash.com)
+Learn about the endpoints at [docs.jsonstash.com](https://docs.jsonstash.com) or check out the postman workspace:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/4246898-d0c0ef60-166a-4b96-8400-03783f22129f?action=collection%2Ffork&collection-url=entityId%3D4246898-d0c0ef60-166a-4b96-8400-03783f22129f%26entityType%3Dcollection%26workspaceId%3D313a790d-ec68-4110-b509-4902e6397a1a)
+
 
 ### Prerequisities
 
