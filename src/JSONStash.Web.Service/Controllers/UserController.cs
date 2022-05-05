@@ -161,15 +161,22 @@ namespace JSONStash.Web.Service.Controllers
                 {
                     User user = await _context.Users.FirstOrDefaultAsync(acct => acct.Email.ToLower().Equals(email.ToString().ToLower()));
 
-                    user.Lock(loginAttemptThreshold);
+                    if (user != null)
+                    {
+                        user.Lock(loginAttemptThreshold);
 
-                    await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
 
-                    string newToken = user.ResetToken;
+                        string newToken = user.ResetToken;
 
-                    // TODO: Send unlock token email to user.
+                        await _unlockTokenService.SendToken(user);
 
-                    return Ok("A new unlock token has been sent.");
+                        return Ok("A new unlock token has been sent.");
+                    }
+                    else
+                    {
+                        return BadRequest("There was an issue with your request. Please, contact the administrator.");
+                    }
                 }
                 else
                 {

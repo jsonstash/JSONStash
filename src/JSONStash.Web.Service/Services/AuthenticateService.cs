@@ -19,12 +19,14 @@ namespace JSONStash.Web.Service.Services
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly JSONStashContext _context;
+        private readonly IUnlockTokenService _unlockTokenService;
 
-        public AuthenticateService(JSONStashContext context, IConfiguration configuration, ILogger<AuthenticateService> logger)
+        public AuthenticateService(JSONStashContext context, IConfiguration configuration, ILogger<AuthenticateService> logger, IUnlockTokenService unlockTokenService)
         {
             _logger = logger;
             _configuration = configuration;
             _context = context;
+            _unlockTokenService = unlockTokenService;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest authenticateRequest)
@@ -73,7 +75,7 @@ namespace JSONStash.Web.Service.Services
                 {
                     _context.SaveChanges();
 
-                    // TODO: Send unlock token email to user.
+                    _unlockTokenService.SendToken(user);
 
                     return new AuthenticateResponse(null, null, "User has been locked. You will receive an email on how you can unlock your user.");
                 }
