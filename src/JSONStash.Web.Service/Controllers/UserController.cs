@@ -22,13 +22,15 @@ namespace JSONStash.Web.Service.Controllers
         private readonly IConfiguration _configuration;
         private readonly JSONStashContext _context;
         private readonly IAuthenticateService _authenticateService;
+        private readonly IUnlockTokenService _unlockTokenService;
 
-        public UserController(JSONStashContext context, IConfiguration configuration, ILogger<UserController> logger, IAuthenticateService authenticateService)
+        public UserController(JSONStashContext context, IConfiguration configuration, ILogger<UserController> logger, IAuthenticateService authenticateService, IUnlockTokenService unlockTokenService)
         {
             _context = context;
             _configuration = configuration;
             _logger = logger;
             _authenticateService = authenticateService;
+            _unlockTokenService = unlockTokenService;
         }
 
         /// <summary>
@@ -133,6 +135,50 @@ namespace JSONStash.Web.Service.Controllers
                 else
                 {
                     return BadRequest("Could not unlock user due to bad token. Please, contact the administrator.");
+                }
+            }
+            catch
+            {
+                return BadRequest("There was an issue with your request. Please, contact the administrator.");
+            }
+        }
+
+        /// <summary>
+        /// Resends a new unlock token to user email used for unlocking a user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("unlock/resend")]
+        public async Task<IActionResult> ResendUnlockTokenAsync()
+        {
+            try
+            {
+                bool hasUserEmail = HttpContext.Request.Headers.TryGetValue("x-user-email", out StringValues email);
+                
+                int.TryParse(_configuration["LoginAttemptThreshold"], out int loginAttemptThreshold);
+
+                if (hasUserEmail)
+                {
+                    User user = await _context.Users.FirstOrDefaultAsync(acct => acct.Email.ToLower().Equals(email.ToString().ToLower()));
+
+                    if (user != null)
+                    {
+                        user.Lock(loginAttemptThreshold);
+
+                        await _context.SaveChangesAsync();
+
+                        bool sent = _unlockTokenService.SendToken(user);
+
+                        return sent ? Ok("A new unlock token has been sent.") : BadRequest("There was an issue sending your unlock token. Please, contact the administrator.");
+                    }
+                    else
+                    {
+                        return BadRequest("There was an issue with your request. Please, contact the administrator.");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Missing email. Please, refer to api documentation for sending a new unlock token.");
                 }
             }
             catch

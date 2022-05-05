@@ -25,6 +25,7 @@ builder.Services
 builder.Services
     .AddDbContext<JSONStashContext>(options => options.UseLazyLoadingProxies().UseSqlite(connectionString))
     .AddScoped<IAuthenticateService, AuthenticateService>()
+    .AddScoped<IUnlockTokenService, UnlockTokenService>()
     .AddScoped<IJSONStashService, JSONStashService>()
     .AddApiVersioning(config =>
     {
