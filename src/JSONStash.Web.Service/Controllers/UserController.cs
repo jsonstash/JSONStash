@@ -22,13 +22,15 @@ namespace JSONStash.Web.Service.Controllers
         private readonly IConfiguration _configuration;
         private readonly JSONStashContext _context;
         private readonly IAuthenticateService _authenticateService;
+        private readonly IUnlockTokenService _unlockTokenService;
 
-        public UserController(JSONStashContext context, IConfiguration configuration, ILogger<UserController> logger, IAuthenticateService authenticateService)
+        public UserController(JSONStashContext context, IConfiguration configuration, ILogger<UserController> logger, IAuthenticateService authenticateService, IUnlockTokenService unlockTokenService)
         {
             _context = context;
             _configuration = configuration;
             _logger = logger;
             _authenticateService = authenticateService;
+            _unlockTokenService = unlockTokenService;
         }
 
         /// <summary>
