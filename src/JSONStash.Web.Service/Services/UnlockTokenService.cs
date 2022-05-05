@@ -1,11 +1,13 @@
 ﻿using JSONStash.Common.Context;
 using JSONStash.Common.Models;
+using System.Net;
+using System.Net.Mail;
 
 namespace JSONStash.Web.Service.Services
 {
     public interface IUnlockTokenService
     {
-        Task<bool> SendToken(User user);
+        bool SendToken(User user);
     }
 
     public class UnlockTokenService : IUnlockTokenService
@@ -21,9 +23,44 @@ namespace JSONStash.Web.Service.Services
             _context = context;
         }
 
-        public async Task<bool> SendToken(User user)
+        public bool SendToken(User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string to = user.Email;
+
+                string host = _configuration["EmailHost"];
+
+                int.TryParse(_configuration["EmailPort"], out int port);
+
+                string username = _configuration["EmailUsername"];
+
+                string password = _configuration["EmailPassword"];
+
+                using SmtpClient client = new(host);
+
+                client.UseDefaultCredentials = false;
+                client.Port = port;
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(username, password);
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                MailMessage mail = new();
+
+                mail.From = new(username);
+                mail.To.Add(to);
+                mail.Subject = $"JSONStash: User Unlock Token";
+                mail.Body = $"Unlock Token: {user.ResetToken}";
+                mail.IsBodyHtml = false;
+
+                client.Send(mail);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
