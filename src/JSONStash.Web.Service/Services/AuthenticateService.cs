@@ -73,6 +73,8 @@ namespace JSONStash.Web.Service.Services
                 {
                     _context.SaveChanges();
 
+                    // TODO: Send unlock token email to user.
+
                     return new AuthenticateResponse(null, null, "User has been locked. You will receive an email on how you can unlock your user.");
                 }
             }

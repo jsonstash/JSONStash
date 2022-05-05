@@ -142,6 +142,45 @@ namespace JSONStash.Web.Service.Controllers
         }
 
         /// <summary>
+        /// Resends a new unlock token to user email used for unlocking a user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("unlock/resend")]
+        public async Task<IActionResult> ResendUnlockTokenAsync()
+        {
+            try
+            {
+                bool hasUserEmail = HttpContext.Request.Headers.TryGetValue("x-user-email", out StringValues email);
+                
+                int.TryParse(_configuration["LoginAttemptThreshold"], out int loginAttemptThreshold);
+
+                if (hasUserEmail)
+                {
+                    User user = await _context.Users.FirstOrDefaultAsync(acct => acct.Email.ToLower().Equals(email.ToString().ToLower()));
+
+                    user.Lock(loginAttemptThreshold);
+
+                    await _context.SaveChangesAsync();
+
+                    string newToken = user.ResetToken;
+
+                    // TODO: Send unlock token email to user.
+
+                    return Ok("A new unlock token has been sent.");
+                }
+                else
+                {
+                    return BadRequest("Missing email. Please, refer to api documentation for sending a new unlock token.");
+                }
+            }
+            catch
+            {
+                return BadRequest("There was an issue with your request. Please, contact the administrator.");
+            }
+        }
+
+        /// <summary>
         /// Delete user and their stashs.
         /// </summary>
         /// <returns></returns>
