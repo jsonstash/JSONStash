@@ -28,6 +28,10 @@ In order to run this container you'll need docker installed.
 * `LoginAttemptThreshold` - Max number of failed login attempts before locking the user out.
 * `JWTSecret` - Json Web Token secret.
 * `JWTExpiresIn` - Json Web Token amount of time in minutes the token expires.
+* `EmailHost` - SMTP email host to send unlock tokens.
+* `EmailPort` - SMTP host port.
+* `EmailUsername` - Email used to authenticate to host.
+* `EmailPassword` - Password used to authenticate to host.
 
 #### Volumes
 
