@@ -36,7 +36,7 @@
         "DefaultConnection": "Data Source=/app/Data/jsonstash.db",
         "JWTSecret": "0b2f3242-e975-49c0-9e65-d5919a9c46a4",
         "StashNameMaxLength": "65",
-        "JWTExpiresIn": "60",
+        "JWTExpiresIn": "15",
         "EmailHost": "",
         "EmailPort": "",
         "EmailUsername": "",
