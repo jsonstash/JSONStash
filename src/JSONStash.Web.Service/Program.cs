@@ -48,7 +48,7 @@ app.UseCors(config =>
 app.UseHttpsRedirection()
    .UseAuthorization();
 
-app.UseMiddleware<AuthenticationMiddleware>();
+app.UseMiddleware<JWTAuthenticationMiddleware>();
 
 app.MapControllers();
 

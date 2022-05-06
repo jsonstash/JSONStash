@@ -8,13 +8,13 @@ using System.Text;
 
 namespace JSONStash.Web.Service.Middleware
 {
-    public class AuthenticationMiddleware
+    public class JWTAuthenticationMiddleware
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly RequestDelegate _next;
 
-        public AuthenticationMiddleware(RequestDelegate next, IConfiguration configuration, ILogger<AuthenticationMiddleware> logger)
+        public JWTAuthenticationMiddleware(RequestDelegate next, IConfiguration configuration, ILogger<JWTAuthenticationMiddleware> logger)
         {
             _next = next;
             _configuration = configuration;
