@@ -17,7 +17,9 @@ namespace JSONStash.Web.Service.Attributes
         public void OnActionExecuting(ActionExecutingContext context)
         {
             IConfiguration configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
-            ILogger logger = context.HttpContext.RequestServices.GetService<ILogger>();
+            
+            ILoggerFactory loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
+            ILogger logger = loggerFactory.CreateLogger(context.Controller.GetType());
 
             var hasValue = context.ActionArguments.TryGetValue("json", out object value);
             
