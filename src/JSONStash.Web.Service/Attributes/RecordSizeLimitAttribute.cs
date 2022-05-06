@@ -41,9 +41,18 @@ namespace JSONStash.Web.Service.Attributes
             }
         }
 
-        private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        /// <summary>
+        /// Convert bytes to it's relative size.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="decimalPlaces"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// Solution Found Here: https://stackoverflow.com/a/14488941
         private static string GetSizeSuffix(long value, int decimalPlaces = 1)
         {
+            string[] sizes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
             if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
             if (value < 0) { return "-" + GetSizeSuffix(-value, decimalPlaces); }
             if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
@@ -58,9 +67,7 @@ namespace JSONStash.Web.Service.Attributes
                 adjustedSize /= 1024;
             }
 
-            return string.Format("{0:n" + decimalPlaces + "} {1}",
-                adjustedSize,
-                SizeSuffixes[mag]);
+            return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, sizes[mag]);
         }
     }
 }
