@@ -85,8 +85,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Bad stash id or version does not exist. Please, refer to the api documentation on getting a stash record.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the get record action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -119,8 +121,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Bad stash id. Please, refer to the api documentation on getting stash versions.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the get metadata action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -165,8 +169,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Missing stash name. Please, refer to the api documentation on creating a stash.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the create stash action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -207,8 +213,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Missing new stash name or bad stash id. Please, refer to the api documentation on updating a stash name.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the update stash name action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -217,7 +225,6 @@ namespace JSONStash.Web.Service.Controllers
         /// Add record version to stash.
         /// </summary>
         /// <param name="stashId"></param>
-        /// <param name="record"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("{stashId}")]
@@ -245,8 +252,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Bad stash id. Please, refer to the api documentation on adding a record to a stash.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the add record version action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -279,8 +288,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Bad stash id. Please, refer to the api documentation on adding a record to a stash.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the delete stash action in stash controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }

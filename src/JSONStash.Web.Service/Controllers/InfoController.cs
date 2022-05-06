@@ -23,9 +23,25 @@ namespace HobbyTail.Web.Service.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Returns the current informational properties of the api.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("")]
         [Produces("application/json")]
-        public IActionResult GetApiInfo() => base.Json(new { ApiInfo.Name, ApiInfo.Description, ApiInfo.Version});
+        public IActionResult GetApiInfo()
+        {
+            try
+            {
+                return Json(new { ApiInfo.Name, ApiInfo.Description, ApiInfo.Version });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during the get api info action in info controller.");
+
+                return BadRequest("There was an issue with your request. Please, contact the administrator.");
+            }
+        }
     }
 }

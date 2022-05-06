@@ -7,6 +7,11 @@ namespace JSONStash.Web.Service.Services
 {
     public interface IUnlockTokenService
     {
+        /// <summary>
+        /// Email a new unlock token to the user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         bool SendToken(User user);
     }
 
@@ -55,10 +60,14 @@ namespace JSONStash.Web.Service.Services
 
                 client.Send(mail);
 
+                _logger.LogInformation($"Unlock token successfully sent to user id: {user.UserGuid}.");
+
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Trouble sending unlock token to user id: {user.UserGuid}.");
+
                 return false;
             }
         }
