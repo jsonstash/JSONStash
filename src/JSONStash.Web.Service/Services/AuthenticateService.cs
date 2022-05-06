@@ -60,6 +60,8 @@ namespace JSONStash.Web.Service.Services
 
                         string token = handler.WriteToken(security);
 
+                        _logger.LogInformation($"Successful login by user id: {user.UserGuid}.");
+
                         return new AuthenticateResponse(user, token, "");
                     }
                     else
@@ -68,11 +70,15 @@ namespace JSONStash.Web.Service.Services
 
                         _context.SaveChanges();
 
+                        _logger.LogInformation($"User provided a bad password and increased their login attempts.");
+
                         return new AuthenticateResponse(null, null, "Your email or password was not inputted correctly. Please try again.");
                     }
                 }
                 else
                 {
+                    _logger.LogInformation($"User was locked out due to reaching more than {loginAttemptThreshold} failed logins.");
+
                     _context.SaveChanges();
 
                     bool sent = _unlockTokenService.SendToken(user);
@@ -83,6 +89,8 @@ namespace JSONStash.Web.Service.Services
             }
             else
             {
+                _logger.LogInformation($"Attempted to find {authenticateRequest.Email} and was unsuccessful.");
+
                 return new AuthenticateResponse(null, null, "The email is not registered with this site.");
             }
         }
