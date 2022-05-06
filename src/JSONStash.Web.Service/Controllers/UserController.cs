@@ -103,8 +103,10 @@ namespace JSONStash.Web.Service.Controllers
                     return Conflict("Email already exists.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the create action in user controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -137,8 +139,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Could not unlock user due to bad token. Please, contact the administrator.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the unlock action in user controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -181,8 +185,10 @@ namespace JSONStash.Web.Service.Controllers
                     return BadRequest("Missing email. Please, refer to api documentation for sending a new unlock token.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the resend unlock token action in user controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
@@ -224,8 +230,10 @@ namespace JSONStash.Web.Service.Controllers
 
                 return BadRequest("Bad email. Please, refer to the api documentation on deleting a user.");
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during the delete action in user controller.");
+
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
