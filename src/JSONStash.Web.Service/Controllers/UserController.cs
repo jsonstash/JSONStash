@@ -55,7 +55,7 @@ namespace JSONStash.Web.Service.Controllers
             }
             else
             {
-                return BadRequest(new AuthenticateResponse(null, null, "Missing email or password. Please, refer to api documentation for user authentication."));
+                return BadRequest(new AuthenticateResponse(null, null, null, "Missing email or password. Please, refer to api documentation for user authentication."));
             }
         }
 
