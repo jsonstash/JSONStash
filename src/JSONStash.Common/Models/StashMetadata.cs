@@ -10,9 +10,9 @@
 
         public DateTimeOffset? Modified { get; set; }
 
-        public Guid StashGuid { get; set; }
+        public Guid StashId { get; set; }
 
-        public Guid CollectionGuid { get; set; }
+        public Guid CollectionId { get; set; }
 
         public StashMetadata(Stash stash)
         {
@@ -20,8 +20,8 @@
             Created = stash.Created;
             Modified = stash.Modified;
             Key = stash.Key;
-            StashGuid = stash.StashGuid;
-            CollectionGuid = stash.Collection.CollectionGuid;
+            StashId = stash.StashGuid;
+            CollectionId = stash.Collection.CollectionGuid;
         }
     }
 }
