@@ -17,6 +17,7 @@ namespace JSONStash.Web.Service.Attributes
         public void OnActionExecuting(ActionExecutingContext context)
         {
             IConfiguration configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
+            ILogger logger = context.HttpContext.RequestServices.GetService<ILogger>();
 
             var hasValue = context.ActionArguments.TryGetValue("json", out object value);
             
@@ -24,6 +25,8 @@ namespace JSONStash.Web.Service.Attributes
             {
                 try
                 {
+                    User user = (User)context.HttpContext.Items["User"];
+
                     JObject record = JObject.FromObject(value);
                     string json = record.ToString(Formatting.None);
                     long bytes = json.Length * sizeof(char);
@@ -31,8 +34,14 @@ namespace JSONStash.Web.Service.Attributes
 
                     int.TryParse(configuration["JSONMaxBytes"], out int jsonMaxBytes);
 
+                    double threshold = jsonMaxBytes * 0.001;
+
                     if (bytes > jsonMaxBytes)
-                        context.Result = new JsonResult(new { message = $"The json you wish to stash is larger than {jsonMaxBytes * 0.001} kbs. Current size: {suffix}" }) { StatusCode = StatusCodes.Status413PayloadTooLarge };
+                    {
+                        logger.LogWarning($"There was an attempt to stash {suffix} of json by user id: {user.UserGuid}.");
+
+                        context.Result = new JsonResult(new { message = $"The json you wish to stash is larger than {threshold} kbs. Current size: {suffix}" }) { StatusCode = StatusCodes.Status413PayloadTooLarge };
+                    }
                 }
                 catch
                 {
