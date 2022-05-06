@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 namespace JSONStash.Web.Service.Controllers
 {
     [Route("s")]
-    [Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     public class StashController : Controller
@@ -37,6 +36,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("")]
+        [JWTAuthorize]
         [Produces("application/json")]
         public async Task<IActionResult> GetStashes()
         {
@@ -44,7 +44,7 @@ namespace JSONStash.Web.Service.Controllers
             {
                 User user = (User)HttpContext.Items["User"];
 
-                StashData[] stashes = _service.GetStashes(user);
+                StashMetadata[] stashes = _service.GetStashes(user);
 
                 return Ok(stashes);
             }
@@ -62,6 +62,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{stashId}")]
+        [KeyAuthorize]
         [Consumes("application/json")]
         [Produces("application/json")]
         public async Task<IActionResult> GetStashData(string stashId)
@@ -74,7 +75,7 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashData stashData = _service.GetStash(user, stashGuid);
+                    StashData stashData = await _service.GetStash(stashGuid);
 
                     return Ok(stashData);
                 }
@@ -95,10 +96,10 @@ namespace JSONStash.Web.Service.Controllers
         /// <summary>
         /// Create stash.
         /// </summary>
-        /// <param name="record"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("")]
+        [JWTAuthorize]
         [RecordSizeLimit]
         [Consumes("application/json")]
         [Produces("application/json")]
@@ -123,9 +124,9 @@ namespace JSONStash.Web.Service.Controllers
 
                     Guid? collectionGuid = Guid.TryParse(collection.ToString(), out Guid temp) ? temp : null;
 
-                    StashData stashData = await _service.CreateStash(user, name, data, collectionGuid);
+                    StashMetadata stashMetadata = await _service.CreateStash(user, name, data, collectionGuid);
 
-                    return Ok(stashData);
+                    return Ok(stashMetadata);
                 }
                 else
                 {
@@ -148,6 +149,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("{stashId}/name")]
+        [JWTAuthorize]
         [Consumes("application/json")]
         [Produces("application/json")]
         public async Task<IActionResult> UpdateName(string stashId)
@@ -190,23 +192,22 @@ namespace JSONStash.Web.Service.Controllers
         /// <param name="stashId"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("{stashId}")]
         [RecordSizeLimit]
+        [Route("{stashId}")]
+        [KeyAuthorize]
         [Consumes("application/json")]
         [Produces("application/json")]
         public async Task<IActionResult> UpdateStashData(string stashId, object json)
         {
             try
             {
-                User user = (User)HttpContext.Items["User"];
-
                 JObject record = JObject.FromObject(json);
 
                 bool isValidStashId = Guid.TryParse(stashId, out Guid stashGuid);
 
                 if (isValidStashId)
                 {
-                    StashData stashData = await _service.UpdateStashData(user, stashGuid, record);
+                    StashData stashData = await _service.UpdateStashData(stashGuid, record);
 
                     return Ok(stashData);
                 }
@@ -230,6 +231,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("{stashId}")]
+        [JWTAuthorize]
         [Consumes("application/json")]
         [Produces("application/json")]
         public async Task<IActionResult> Delete(string stashId)

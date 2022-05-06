@@ -18,13 +18,13 @@ namespace JSONStash.Common.Services
             _context = context;
         }
 
-        public StashData[] GetStashes(User user)
+        public StashMetadata[] GetStashes(User user)
         {
             if (user != null)
             {
                 return user.Collections
                     .SelectMany(collection => collection.Stashes
-                    .Select(stash => new StashData(stash)))
+                    .Select(stash => new StashMetadata(stash)))
                     .OrderByDescending(stashData => stashData.Created)
                     .ToArray();
             }
@@ -32,7 +32,7 @@ namespace JSONStash.Common.Services
             return null;
         }
 
-        public async Task<StashData> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null)
+        public async Task<StashMetadata> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null)
         {
             if (user != null)
             {
@@ -56,6 +56,7 @@ namespace JSONStash.Common.Services
                     Name = stashName,
                     CollectionId = collection.CollectionId,
                     Data = json.ToString(Formatting.None),
+                    Key = Guid.NewGuid(),
                     Created = DateTimeOffset.UtcNow,
                     StashGuid = Guid.NewGuid(),
                 };
@@ -112,9 +113,9 @@ namespace JSONStash.Common.Services
             return false;
         }
 
-        public async Task<StashData> UpdateStashData(User user, Guid stashGuid, JObject json)
+        public async Task<StashData> UpdateStashData(Guid stashGuid, JObject json)
         {
-            Stash stash = await _context.Stashes.FirstOrDefaultAsync(stash => stash.StashGuid.Equals(stashGuid) && stash.Collection.User.UserGuid.Equals(user.UserGuid));
+            Stash stash = await _context.Stashes.FirstOrDefaultAsync(stash => stash.StashGuid.Equals(stashGuid));
 
             if (stash != null)
             {
@@ -129,17 +130,12 @@ namespace JSONStash.Common.Services
             return null;
         }
 
-        public StashData GetStash(User user, Guid stashGuid)
+        public async Task<StashData> GetStash(Guid stashGuid)
         {
-            if (user != null)
-            {
-                Stash stash = user.Collections
-                                .SelectMany(collection => collection.Stashes
-                                .Where(stash => stash.StashGuid.Equals(stashGuid)))
-                                .FirstOrDefault();
+            Stash stash = await _context.Stashes.FirstOrDefaultAsync(stash => stash.StashGuid.Equals(stashGuid));
 
-                return stash != null ? new(stash) : null;
-            }
+            if (stash != null)
+                return new(stash);
 
             return null;
         }
