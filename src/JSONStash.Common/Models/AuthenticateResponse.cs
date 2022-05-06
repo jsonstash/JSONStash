@@ -10,16 +10,19 @@ namespace JSONStash.Common.Models
         
         public string Token { get; set; }
 
+        public DateTimeOffset? TokenExpiresIn { get; set; }
+
         public string Message { get; set; }
 
 
-        public AuthenticateResponse(User user, string token, string message)
+        public AuthenticateResponse(User user, string token, DateTimeOffset? tokenExpiresIn, string message)
         {
-            if (user != null && !string.IsNullOrEmpty(token))
+            if (user != null && !string.IsNullOrEmpty(token) && tokenExpiresIn != null)
             {
                 Id = user.UserGuid;
                 Email = user.Email;
                 Token = token;
+                TokenExpiresIn = tokenExpiresIn;
             }
             Message = message;
         }
