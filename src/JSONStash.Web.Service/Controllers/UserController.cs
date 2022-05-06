@@ -197,7 +197,7 @@ namespace JSONStash.Web.Service.Controllers
         /// Delete user and their stashs.
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        [JWTAuthorize]
         [HttpDelete]
         [Route("delete")]
         public async Task<IActionResult> DeleteAsync()

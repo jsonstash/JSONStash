@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace HobbyTail.Web.Service.Controllers
 {
-    [Authorize]
+    [JWTAuthorize]
     [Route("i")]
     [ApiController]
     [ApiVersion("1.0")]

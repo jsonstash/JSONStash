@@ -13,6 +13,8 @@ namespace JSONStash.Common.Models
 
         public string Data { get; set; }
 
+        public Guid Key { get; set; }
+
         public DateTimeOffset Created { get; set; }
 
         public DateTimeOffset? Modified { get; set; }
