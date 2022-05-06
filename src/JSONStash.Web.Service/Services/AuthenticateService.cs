@@ -60,9 +60,11 @@ namespace JSONStash.Web.Service.Services
 
                         string token = handler.WriteToken(security);
 
+                        DateTimeOffset? expires = (DateTimeOffset?)tokenDescriptor.Expires;
+
                         _logger.LogInformation($"Successful login by user id: {user.UserGuid}.");
 
-                        return new AuthenticateResponse(user, token, "");
+                        return new AuthenticateResponse(user, token, expires, "");
                     }
                     else
                     {
@@ -72,7 +74,7 @@ namespace JSONStash.Web.Service.Services
 
                         _logger.LogInformation($"User provided a bad password and increased their login attempts.");
 
-                        return new AuthenticateResponse(null, null, "Your email or password was not inputted correctly. Please try again.");
+                        return new AuthenticateResponse(null, null, null, "Your email or password was not inputted correctly. Please try again.");
                     }
                 }
                 else
@@ -83,15 +85,15 @@ namespace JSONStash.Web.Service.Services
 
                     bool sent = _unlockTokenService.SendToken(user);
 
-                    return sent ? new AuthenticateResponse(null, null, "User has been locked. You will receive an email on how you can unlock your user.") 
-                        : new AuthenticateResponse(null, null, "There was an issue sending your unlock token. Please, contact the administrator.");
+                    return sent ? new AuthenticateResponse(null, null, null, "User has been locked. You will receive an email on how you can unlock your user.") 
+                        : new AuthenticateResponse(null, null, null, "There was an issue sending your unlock token. Please, contact the administrator.");
                 }
             }
             else
             {
                 _logger.LogInformation($"Attempted to find {authenticateRequest.Email} and was unsuccessful.");
 
-                return new AuthenticateResponse(null, null, "The email is not registered with this site.");
+                return new AuthenticateResponse(null, null, null, "The email is not registered with this site.");
             }
         }
     }
