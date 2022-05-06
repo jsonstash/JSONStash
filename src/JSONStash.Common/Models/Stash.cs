@@ -11,6 +11,8 @@ namespace JSONStash.Common.Models
 
         public string Name { get; set; }
 
+        public string Data { get; set; }
+
         public DateTimeOffset Created { get; set; }
 
         public DateTimeOffset? Modified { get; set; }
@@ -19,7 +21,5 @@ namespace JSONStash.Common.Models
 
 
         public virtual Collection Collection { get; set; }
-
-        public virtual ICollection<Record> Records { get; set; }
     }
 }

@@ -212,12 +212,7 @@ namespace JSONStash.Web.Service.Controllers
                     if (email[0].ToLower().Equals(user.Email.ToLower()))
                     {
                         foreach (Collection collection in user.Collections)
-                        {
-                            foreach (Stash stash in collection.Stashes)
-                                _context.Records.RemoveRange(stash.Records);
-
                             _context.Stashes.RemoveRange(collection.Stashes);
-                        }
 
                         _context.Collections.RemoveRange(user.Collections);
 

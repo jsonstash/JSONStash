@@ -44,7 +44,7 @@ namespace JSONStash.Web.Service.Controllers
             {
                 User user = (User)HttpContext.Items["User"];
 
-                Metadata[] stashes = _service.GetStashes(user);
+                StashData[] stashes = _service.GetStashes(user);
 
                 return Ok(stashes);
             }
@@ -55,18 +55,16 @@ namespace JSONStash.Web.Service.Controllers
         }
 
         /// <summary>
-        /// Get record from stash.
+        /// Get stash data.
         /// </summary>
         /// <param name="stashId"></param>
         /// <param name="version"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("{stashId}")]
-        [Route("{stashId}/latest")]
-        [Route("{stashId}/{version}")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public async Task<IActionResult> GetRecord(string stashId, int? version)
+        public async Task<IActionResult> GetStashData(string stashId)
         {
             try
             {
@@ -76,61 +74,26 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashRecord stashRecord = await _service.GetStashRecord(user, stashGuid, version);
+                    StashData stashData = _service.GetStash(user, stashGuid);
 
-                    return Ok(stashRecord);
+                    return Ok(stashData);
                 }
                 else
                 {
-                    return BadRequest("Bad stash id or version does not exist. Please, refer to the api documentation on getting a stash record.");
+                    return BadRequest("Bad stash id. Please, refer to the api documentation on getting a stash.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred during the get record action in stash controller.");
+                _logger.LogError(ex, "An error occurred during the get stash action in stash controller.");
 
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }
         }
 
-        /// <summary>
-        /// Get stash version count.
-        /// </summary>
-        /// <param name="stashId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("{stashId}/metadata")]
-        [Consumes("application/json")]
-        [Produces("application/json")]
-        public async Task<IActionResult> GetMetadata(string stashId)
-        {
-            try
-            {
-                User user = (User)HttpContext.Items["User"];
-
-                bool isValidStashId = Guid.TryParse(stashId, out Guid stashGuid);
-
-                if (isValidStashId)
-                {
-                    Metadata metadata = await _service.GetStashMetadata(user, stashGuid);
-
-                    return Ok(metadata);
-                }
-                else
-                {
-                    return BadRequest("Bad stash id. Please, refer to the api documentation on getting stash versions.");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred during the get metadata action in stash controller.");
-
-                return BadRequest("There was an issue with your request. Please, contact the administrator.");
-            }
-        }
 
         /// <summary>
-        /// Create stash and add first record.
+        /// Create stash.
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
@@ -143,7 +106,7 @@ namespace JSONStash.Web.Service.Controllers
         {
             try
             {
-                JObject record = JObject.FromObject(json);
+                JObject data = JObject.FromObject(json);
 
                 User user = (User)HttpContext.Items["User"];
 
@@ -151,7 +114,7 @@ namespace JSONStash.Web.Service.Controllers
 
                 HttpContext.Request.Headers.TryGetValue("x-collection-id", out StringValues collection);
 
-                if (hasName && record != null)
+                if (hasName && data != null)
                 {
                     int.TryParse(_configuration["StashNameMaxLength"], out int stashNameMaxLength);
 
@@ -160,9 +123,9 @@ namespace JSONStash.Web.Service.Controllers
 
                     Guid? collectionGuid = Guid.TryParse(collection.ToString(), out Guid temp) ? temp : null;
 
-                    StashRecord stashRecord = await _service.CreateStash(user, name, record, collectionGuid);
+                    StashData stashData = await _service.CreateStash(user, name, data, collectionGuid);
 
-                    return Ok(stashRecord);
+                    return Ok(stashData);
                 }
                 else
                 {
@@ -222,7 +185,7 @@ namespace JSONStash.Web.Service.Controllers
         }
 
         /// <summary>
-        /// Add record version to stash.
+        /// Update stash data.
         /// </summary>
         /// <param name="stashId"></param>
         /// <returns></returns>
@@ -231,7 +194,7 @@ namespace JSONStash.Web.Service.Controllers
         [RecordSizeLimit]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public async Task<IActionResult> AddRecordVersion(string stashId, object json)
+        public async Task<IActionResult> UpdateStashData(string stashId, object json)
         {
             try
             {
@@ -243,18 +206,18 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashRecord stashRecord = await _service.AddStashRecordVersion(user, stashGuid, record);
+                    StashData stashData = await _service.UpdateStashData(user, stashGuid, record);
 
-                    return Ok(stashRecord);
+                    return Ok(stashData);
                 }
                 else
                 {
-                    return BadRequest("Bad stash id. Please, refer to the api documentation on adding a record to a stash.");
+                    return BadRequest("Bad stash id. Please, refer to the api documentation on updating a stash.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred during the add record version action in stash controller.");
+                _logger.LogError(ex, "An error occurred during the update stash action in stash controller.");
 
                 return BadRequest("There was an issue with your request. Please, contact the administrator.");
             }

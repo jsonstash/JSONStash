@@ -10,7 +10,6 @@ namespace JSONStash.Common.Context
     {
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Stash> Stashes { get; set; }
-        public virtual DbSet<Record> Records { get; set; }
         public virtual DbSet<Collection> Collections { get; set; }
 
         protected JSONStashContext()
