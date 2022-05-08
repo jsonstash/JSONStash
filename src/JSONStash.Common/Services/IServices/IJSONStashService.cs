@@ -9,7 +9,7 @@ namespace JSONStash.Common.Services.IServices
         /// Get list of user stashes.
         /// </summary>
         /// <returns></returns>
-        StashMetadata[] GetStashes(User user);
+        StashDetail[] GetStashes(User user);
 
         /// <summary>
         /// Get stash.
@@ -24,7 +24,7 @@ namespace JSONStash.Common.Services.IServices
         /// <param name="json"></param>
         /// <param name="collectionGuid"></param>
         /// <returns></returns>
-        Task<StashMetadata> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null);
+        Task<StashDetail> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null);
 
         /// <summary>
         /// Update stash data.

@@ -44,7 +44,7 @@ namespace JSONStash.Web.Service.Controllers
             {
                 User user = (User)HttpContext.Items["User"];
 
-                StashMetadata[] stashes = _service.GetStashes(user);
+                StashDetail[] stashes = _service.GetStashes(user);
 
                 return Ok(stashes);
             }
@@ -124,7 +124,7 @@ namespace JSONStash.Web.Service.Controllers
 
                     Guid? collectionGuid = Guid.TryParse(collection.ToString(), out Guid temp) ? temp : null;
 
-                    StashMetadata stashMetadata = await _service.CreateStash(user, name, data, collectionGuid);
+                    StashDetail stashMetadata = await _service.CreateStash(user, name, data, collectionGuid);
 
                     return Ok(stashMetadata);
                 }

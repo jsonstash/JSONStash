@@ -1,6 +1,6 @@
 ﻿namespace JSONStash.Common.Models
 {
-    public class StashMetadata
+    public class StashDetail
     {
         public string Name { get; set; }
 
@@ -14,7 +14,7 @@
 
         public Guid CollectionId { get; set; }
 
-        public StashMetadata(Stash stash)
+        public StashDetail(Stash stash)
         {
             Name = stash.Name;
             Created = stash.Created;

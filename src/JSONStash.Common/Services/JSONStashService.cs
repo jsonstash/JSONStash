@@ -18,13 +18,13 @@ namespace JSONStash.Common.Services
             _context = context;
         }
 
-        public StashMetadata[] GetStashes(User user)
+        public StashDetail[] GetStashes(User user)
         {
             if (user != null)
             {
                 return user.Collections
                     .SelectMany(collection => collection.Stashes
-                    .Select(stash => new StashMetadata(stash)))
+                    .Select(stash => new StashDetail(stash)))
                     .OrderByDescending(stashData => stashData.Created)
                     .ToArray();
             }
@@ -32,7 +32,7 @@ namespace JSONStash.Common.Services
             return null;
         }
 
-        public async Task<StashMetadata> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null)
+        public async Task<StashDetail> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null)
         {
             if (user != null)
             {
