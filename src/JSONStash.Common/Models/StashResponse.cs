@@ -1,12 +1,12 @@
 ﻿namespace JSONStash.Common.Models
 {
-    public class StashData
+    public class StashResponse
     {
         public string Data { get; set; }
 
         public StashMetadata Metadata { get; set; }
 
-        public StashData(Stash stash)
+        public StashResponse(Stash stash)
         {
             Data = stash.Data;
             Metadata = new(stash);

@@ -113,7 +113,7 @@ namespace JSONStash.Common.Services
             return false;
         }
 
-        public async Task<StashData> UpdateStashData(Guid stashGuid, JObject json)
+        public async Task<StashResponse> UpdateStashData(Guid stashGuid, JObject json)
         {
             Stash stash = await _context.Stashes.FirstOrDefaultAsync(stash => stash.StashGuid.Equals(stashGuid));
 
@@ -130,7 +130,7 @@ namespace JSONStash.Common.Services
             return null;
         }
 
-        public async Task<StashData> GetStash(Guid stashGuid)
+        public async Task<StashResponse> GetStash(Guid stashGuid)
         {
             Stash stash = await _context.Stashes.FirstOrDefaultAsync(stash => stash.StashGuid.Equals(stashGuid));
 

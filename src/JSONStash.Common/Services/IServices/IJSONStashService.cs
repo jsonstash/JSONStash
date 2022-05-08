@@ -15,7 +15,7 @@ namespace JSONStash.Common.Services.IServices
         /// Get stash.
         /// </summary>
         /// <returns></returns>
-        Task<StashData> GetStash(Guid stashGuid);
+        Task<StashResponse> GetStash(Guid stashGuid);
 
         /// <summary>
         /// Create stash with record and add to collection if passed.
@@ -31,7 +31,7 @@ namespace JSONStash.Common.Services.IServices
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        Task<StashData> UpdateStashData(Guid stashGuid, JObject json);
+        Task<StashResponse> UpdateStashData(Guid stashGuid, JObject json);
 
         /// <summary>
         /// Update the name of the stash.

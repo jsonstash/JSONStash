@@ -75,7 +75,7 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashData stashData = await _service.GetStash(stashGuid);
+                    StashResponse stashData = await _service.GetStash(stashGuid);
 
                     return Ok(stashData);
                 }
@@ -207,7 +207,7 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashData stashData = await _service.UpdateStashData(stashGuid, record);
+                    StashResponse stashData = await _service.UpdateStashData(stashGuid, record);
 
                     return Ok(stashData);
                 }
