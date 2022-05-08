@@ -34,7 +34,7 @@ namespace JSONStash.Web.Service.Attributes
                     long bytes = json.Length * sizeof(char);
                     string suffix = GetSizeSuffix(bytes);
 
-                    int.TryParse(configuration["JSONMaxBytes"], out int jsonMaxBytes);
+                    long.TryParse(configuration["JSONMaxBytes"], out long jsonMaxBytes);
 
                     double threshold = jsonMaxBytes * 0.001;
 

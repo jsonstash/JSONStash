@@ -44,7 +44,7 @@ namespace JSONStash.Web.Service.Controllers
             {
                 User user = (User)HttpContext.Items["User"];
 
-                StashMetadata[] stashes = _service.GetStashes(user);
+                StashDetail[] stashes = _service.GetStashes(user);
 
                 return Ok(stashes);
             }
@@ -75,9 +75,12 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashData stashData = await _service.GetStash(stashGuid);
+                    StashResponse response = await _service.GetStash(stashGuid);
 
-                    return Ok(stashData);
+                    if (long.TryParse(_configuration["JSONMaxBytes"], out long jsonMaxBytes))
+                        response.SetQuota(jsonMaxBytes);
+
+                    return Ok(response);
                 }
                 else
                 {
@@ -124,7 +127,7 @@ namespace JSONStash.Web.Service.Controllers
 
                     Guid? collectionGuid = Guid.TryParse(collection.ToString(), out Guid temp) ? temp : null;
 
-                    StashMetadata stashMetadata = await _service.CreateStash(user, name, data, collectionGuid);
+                    StashDetail stashMetadata = await _service.CreateStash(user, name, data, collectionGuid);
 
                     return Ok(stashMetadata);
                 }
@@ -207,9 +210,12 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashData stashData = await _service.UpdateStashData(stashGuid, record);
+                    StashResponse response = await _service.UpdateStashData(stashGuid, record);
 
-                    return Ok(stashData);
+                    if (long.TryParse(_configuration["JSONMaxBytes"], out long jsonMaxBytes))
+                        response.SetQuota(jsonMaxBytes);
+
+                    return Ok(response);
                 }
                 else
                 {

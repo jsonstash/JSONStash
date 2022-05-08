@@ -1,10 +1,10 @@
 ﻿namespace JSONStash.Common.Models
 {
-    public class StashData
+    public class StashDetail
     {
         public string Name { get; set; }
 
-        public string Data { get; set; }
+        public Guid Key { get; set; }
 
         public DateTimeOffset Created { get; set; }
 
@@ -14,12 +14,12 @@
 
         public Guid CollectionId { get; set; }
 
-        public StashData(Stash stash)
+        public StashDetail(Stash stash)
         {
             Name = stash.Name;
-            Data = stash.Data;
             Created = stash.Created;
             Modified = stash.Modified;
+            Key = stash.Key;
             StashId = stash.StashGuid;
             CollectionId = stash.Collection.CollectionGuid;
         }

@@ -9,13 +9,13 @@ namespace JSONStash.Common.Services.IServices
         /// Get list of user stashes.
         /// </summary>
         /// <returns></returns>
-        StashMetadata[] GetStashes(User user);
+        StashDetail[] GetStashes(User user);
 
         /// <summary>
         /// Get stash.
         /// </summary>
         /// <returns></returns>
-        Task<StashData> GetStash(Guid stashGuid);
+        Task<StashResponse> GetStash(Guid stashGuid);
 
         /// <summary>
         /// Create stash with record and add to collection if passed.
@@ -24,14 +24,14 @@ namespace JSONStash.Common.Services.IServices
         /// <param name="json"></param>
         /// <param name="collectionGuid"></param>
         /// <returns></returns>
-        Task<StashMetadata> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null);
+        Task<StashDetail> CreateStash(User user, string stashName, JObject json, Guid? collectionGuid = null);
 
         /// <summary>
         /// Update stash data.
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        Task<StashData> UpdateStashData(Guid stashGuid, JObject json);
+        Task<StashResponse> UpdateStashData(Guid stashGuid, JObject json);
 
         /// <summary>
         /// Update the name of the stash.
