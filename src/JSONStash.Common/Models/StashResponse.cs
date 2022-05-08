@@ -11,5 +11,12 @@
             Data = stash.Data;
             Metadata = new(stash);
         }
+
+        public void SetQuota(long max)
+        {
+            long used = Data.Length * sizeof(char);
+
+            Metadata.Quota = new(max, used);
+        }
     }
 }

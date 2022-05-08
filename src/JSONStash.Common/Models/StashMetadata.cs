@@ -12,6 +12,8 @@
 
         public Guid CollectionId { get; set; }
 
+        public StashQuota Quota { get; set; }
+
         public StashMetadata(Stash stash)
         {
             Name = stash.Name;

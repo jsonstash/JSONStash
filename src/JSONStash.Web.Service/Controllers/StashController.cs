@@ -75,9 +75,13 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashResponse stashData = await _service.GetStash(stashGuid);
+                    long.TryParse(_configuration["JSONMaxBytes"], out long jsonMaxBytes);
 
-                    return Ok(stashData);
+                    StashResponse response = await _service.GetStash(stashGuid);
+
+                    response.SetQuota(jsonMaxBytes);
+
+                    return Ok(response);
                 }
                 else
                 {
@@ -207,9 +211,13 @@ namespace JSONStash.Web.Service.Controllers
 
                 if (isValidStashId)
                 {
-                    StashResponse stashData = await _service.UpdateStashData(stashGuid, record);
+                    long.TryParse(_configuration["JSONMaxBytes"], out long jsonMaxBytes);
 
-                    return Ok(stashData);
+                    StashResponse response = await _service.UpdateStashData(stashGuid, record);
+
+                    response.SetQuota(jsonMaxBytes);
+
+                    return Ok(response);
                 }
                 else
                 {
