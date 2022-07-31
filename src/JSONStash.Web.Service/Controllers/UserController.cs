@@ -66,6 +66,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("create")]
+        [JWTAuthorizeAdmin]
         public async Task<IActionResult> CreateAsync()
         {
             try
@@ -119,6 +120,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("unlock")]
+        [JWTAuthorizeAdmin]
         public async Task<IActionResult> UnlockAsync()
         {
             try
@@ -154,6 +156,7 @@ namespace JSONStash.Web.Service.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("unlock/resend")]
+        [JWTAuthorizeAdmin]
         public async Task<IActionResult> ResendUnlockTokenAsync()
         {
             try
@@ -201,6 +204,7 @@ namespace JSONStash.Web.Service.Controllers
         [JWTAuthorize]
         [HttpDelete]
         [Route("delete")]
+        [JWTAuthorizeAdmin]
         public async Task<IActionResult> DeleteAsync()
         {
             try
