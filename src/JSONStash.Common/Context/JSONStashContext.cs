@@ -33,11 +33,9 @@ namespace JSONStash.Common.Context
 
             builder.Entity<User>(entity =>
             {
-                Guid salt = Guid.NewGuid();
-
-                using SHA512 sha512Hash = SHA512.Create();
-
                 entity.HasIndex(e => new { e.Email }).IsUnique();
+
+                entity.HasIndex(e => new { e.Username }).IsUnique();
             });
         }
     }

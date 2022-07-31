@@ -1,4 +1,5 @@
-﻿using JSONStash.Common.Models;
+﻿using JSONStash.Common.Enums;
+using JSONStash.Common.Models;
 using JSONStash.Web.Service.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace JSONStash.Web.Service.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class JWTAuthorizeAttribute : Attribute, IAuthorizationFilter
+    public class JWTAuthorizeAdminAttribute : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
