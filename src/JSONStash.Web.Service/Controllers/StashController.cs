@@ -2,6 +2,7 @@
 using JSONStash.Common.Models;
 using JSONStash.Common.Services.IServices;
 using JSONStash.Web.Service.Attributes;
+using JSONStash.Web.Service.Extensions;
 using JSONStash.Web.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,7 @@ namespace JSONStash.Web.Service.Controllers
         {
             try
             {
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
                 StashDetail[] stashes = _service.GetStashes(user);
 
@@ -69,7 +70,7 @@ namespace JSONStash.Web.Service.Controllers
         {
             try
             {
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
                 bool isValidStashId = Guid.TryParse(stashId, out Guid stashGuid);
 
@@ -112,13 +113,13 @@ namespace JSONStash.Web.Service.Controllers
             {
                 JObject data = JObject.FromObject(json);
 
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
                 bool hasName = HttpContext.Request.Headers.TryGetValue("x-stash-name", out StringValues name);
 
                 HttpContext.Request.Headers.TryGetValue("x-collection-id", out StringValues collection);
 
-                if (hasName && data != null)
+                if (hasName && data != null && exists)
                 {
                     int.TryParse(_configuration["StashNameMaxLength"], out int stashNameMaxLength);
 
@@ -159,13 +160,13 @@ namespace JSONStash.Web.Service.Controllers
         {
             try
             {
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
                 bool hasName = HttpContext.Request.Headers.TryGetValue("x-stash-name", out StringValues name);
 
                 bool isValidStashId = Guid.TryParse(stashId, out Guid stashGuid);
 
-                if (hasName && isValidStashId)
+                if (hasName && isValidStashId && exists)
                 {
                     int.TryParse(_configuration["StashNameMaxLength"], out int stashNameMaxLength);
 
@@ -244,11 +245,11 @@ namespace JSONStash.Web.Service.Controllers
         {
             try
             {
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
                 bool isValidStashId = Guid.TryParse(stashId, out Guid stashGuid);
 
-                if (isValidStashId)
+                if (isValidStashId && exists)
                 {
                     bool deleted = await _service.DeleteStash(user, stashGuid);
 

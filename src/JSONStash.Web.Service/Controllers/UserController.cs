@@ -10,6 +10,7 @@ using Microsoft.Data.Sqlite;
 using JSONStash.Web.Service.Attributes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using JSONStash.Web.Service.Extensions;
 
 namespace JSONStash.Web.Service.Controllers
 {
@@ -206,9 +207,9 @@ namespace JSONStash.Web.Service.Controllers
             {
                 bool hasEmail = HttpContext.Request.Headers.TryGetValue("x-validate-email", out StringValues email);
 
-                User user = (User)HttpContext.Items["User"];
+                bool exists = HttpContext.TryParseItem("User", out User user);
 
-                if (hasEmail)
+                if (hasEmail && exists)
                     if (email[0].ToLower().Equals(user.Email.ToLower()))
                     {
                         foreach (Collection collection in user.Collections)

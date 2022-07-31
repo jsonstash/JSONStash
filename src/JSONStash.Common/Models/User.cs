@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using JSONStash.Common.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,10 +9,14 @@ namespace JSONStash.Common.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
-        
+
+        public string Username { get; set; }
+
         public string Email { get; set; }
 
         public byte[] Password { get; set; }
+
+        public RoleType Role { get; set; }
 
         public Guid Salt { get; set; }
 
