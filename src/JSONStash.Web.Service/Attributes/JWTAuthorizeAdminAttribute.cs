@@ -11,8 +11,8 @@ namespace JSONStash.Web.Service.Attributes
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            bool exists = context.HttpContext.TryParseItem("User", out User _);
-            if (!exists)
+            bool exists = context.HttpContext.TryParseItem("User", out User user);
+            if (!exists && !user.Role.Equals(RoleType.Administrator))
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }
     }
